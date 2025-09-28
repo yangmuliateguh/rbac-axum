@@ -19,7 +19,7 @@ pub async fn rbac_middleware(
 
     let token = auth_header
         .and_then(|h| h.strip_prefix("Bearer "))
-        .ok_or(StatusCode::UNAUTHORIZED);
+        .ok_or(StatusCode::UNAUTHORIZED)?;
 
     let claims = crate::auth::jwt::validate_token(token)
         .map_err(|_| StatusCode::UNAUTHORIZED)?;

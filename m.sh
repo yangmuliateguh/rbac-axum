@@ -1,1 +1,1 @@
-git commit -m "feat: add models, handlers, and authentication module"
+git commit -m "feat: developing main.rs and fixing some errors"

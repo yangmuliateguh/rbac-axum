@@ -1,2 +1,2 @@
-pub mod user;
-pub use user::{Claims, UserRole};
+pub mod users;
+pub use users::{Claims, UserRole};

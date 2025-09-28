@@ -1,12 +1,7 @@
 use crate::models::Claims;
 use jsonwebtoken::{decode, encode, DecodingKey, EncodingKey, Header, Validation};
-use once_cell::sync::Lazy;
-use std::env;
 
-static JWT_SECRET: Lazy<Vec<u8>> = Lazy::new(|| {
-    let secret = env::var("JWT_SECRET").expect("JWT_SECRET harus disetel di environment");
-    secret.into_bytes()
-});
+const JWT_SECRET: &[u8] = b"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiYWRtaW4iOnRydWUsImlhdCI6MTUxNjIzOTAyMn0.KMUFsIDTnFmyG3nMiGM6H9FNFUROf3wh7SmqJp-QV30";
 
 pub fn create_token(
     username: String, role: crate::models::UserRole
