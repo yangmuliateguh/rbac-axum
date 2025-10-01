@@ -7,7 +7,6 @@ use axum::{
     routing::{get, post},
     Extension, Router
 };
-use std::sync::Arc;
 use crate::models::UserRole;
 use crate::handlers::{auth as handlers_auth, public, protected};
 use crate::auth::middleware::rbac_middleware;
@@ -20,24 +19,17 @@ async fn main() {
         .route(
             "/user",
             get(protected::user_handler)
-                .route_layer(middleware::from_fn_with_state(
-                    Arc::new(UserRole::User),
-                    |headers, Extension(role), req, next| async move{
-                        rbac_middleware(headers, Extension(role), req, next).await
-                    }
-                ))
+                .route_layer(middleware::from_fn(rbac_middleware))
+                .layer(Extension(UserRole::User)),
         )
         .route(
             "/admin",
             get(protected::admin_handler)
-                .route_layer(middleware::from_fn_with_state(
-                    Arc::new(UserRole::Admin),
-                    |headers, Extension(role), req, next| async move{
-                        rbac_middleware(headers, Extension(role), req, next).await
-                    }
-            ))
+                .route_layer(middleware::from_fn(rbac_middleware))
+                .layer(Extension(UserRole::Admin)),
         );
 
+    println!("UserRole path: {}", std::any::type_name::<UserRole>());
     let listener = tokio::net::TcpListener::bind("0.0.0.0:3000")
         .await
         .unwrap();
